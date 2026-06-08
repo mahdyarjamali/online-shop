@@ -1,10 +1,8 @@
-import express from 'express'
-
+const express = require("express")
+const authRoutes = require("./routes/auth")
 const app = express()
 
-app.get('/new', (req, res) => {
-  res.send('Hello world!')
-})
+app.use("/api" , authRoutes)
 
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000')
