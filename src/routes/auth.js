@@ -7,31 +7,31 @@ const myLogger = function (req, res, next) {
   next();
 };
 
-// router.use(myLogger)
+
+const register = function (req , res){
+  res.send('register page')
+}
+
+const login = function (req , res){
+  res.send('login page')
+} 
+
+const logout = function (req , res){
+  res.send('logout page')
+} 
+
+const resetPassword = function (req , res){
+  res.send('reset password page')
+} 
 
 
-router.get('/register', (req, res) => {
-  // res.send('register page')
-  console.log('register page')
-})
+router.get('/register', register)
 
-router.get('/login', (req, res) => {
-  // res.send('login page')
-  console.log('login page')
-  
-})
+router.get('/login', login)
 
-router.get('/logout', (req, res) => {
-  // res.send('logout page')
-  console.log('logout page')
+router.get('/logout', logout)
 
-})
-
-router.get('/reset-password', (req, res) => {
-  // res.send('reset password page')
-  console.log('reset password page')
-
-})
+router.get('/reset-password', resetPassword)
 
 
 router.use("/auth" , myLogger , router)
