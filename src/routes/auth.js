@@ -6,9 +6,9 @@ const db = new sqlite3.Database("shop.db");
 const register = function (req, res) {
   db.serialize(() => {
     db.run(
-      `insert into users (first_name , last_name)
-      values (? , ?)`,
-      ["mahdyar", "jamali"],
+      `insert into users (name , email , password , role)
+      values (? , ? , ? , ? )`,
+      ["mahdyar jamali", "dmkkclmkdck@gmail.com", 65123, "user"],
       (err) => {
         if (err) {
           res.send(err.message);
