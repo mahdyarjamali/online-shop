@@ -10,7 +10,7 @@ db.serialize(() => {
     email text not null unique,
     password text not null,
     phone text unique,
-    role text not null default 'user' check(role in ('user' , 'admin')),
+    role text not null default 'customer' check(role in ('customer' , 'admin')),
     address text,
     created_at datetime default current_timestamp
     )`,
