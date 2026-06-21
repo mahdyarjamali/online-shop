@@ -4,11 +4,21 @@ const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("shop.db");
 
 const register = function (req, res) {
+  // console.log(req.body);
+  // process.exit();
+  const userData = [
+    req.body.name,
+    req.body.email,
+    req.body.password,
+    req.body.phone,
+    req.body.role,
+    req.body.address
+  ]
   db.serialize(() => {
     db.run(
-      `insert into users (name , email , password , role)
-      values (? , ? , ? , ? )`,
-      ["mahdyar jamali", "dmkkclmkdck@gmail.com", 65123, "user"],
+      `insert into users (name , email , password , phone , role , address)
+      values (? , ? , ? , ? , ? , ?)`,
+      userData ,
       (err) => {
         if (err) {
           res.send(err.message);
@@ -46,7 +56,7 @@ const resetPassword = function (req, res) {
   res.send("reset password page");
 };
 
-router.get("/register", register);
+router.post("/register", register);
 
 router.get("/me", me);
 
@@ -56,6 +66,5 @@ router.get("/logout", logout);
 
 router.get("/reset-password", resetPassword);
 
-router.use("/auth", router);
 
 module.exports = router;
