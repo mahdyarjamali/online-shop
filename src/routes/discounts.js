@@ -4,7 +4,7 @@ const router = express.Router();
 const sqlite3 = require("sqlite3").verbose();
 const db = new sqlite3.Database("shop.db");
 
-const applyDiscount = function (req, res) {
+const createDiscount = function (req, res) {
   const discountData = [
     req.body.code,
     req.body.percentage,
@@ -30,7 +30,7 @@ const applyDiscount = function (req, res) {
 //
 //
 //
-router.post("/create_discount", applyDiscount);
+router.post("/create_discount", createDiscount);
 //
 //
 //
