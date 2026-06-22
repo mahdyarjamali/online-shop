@@ -30,9 +30,9 @@ const applyDiscount = function (req, res) {
 //
 //
 //
-router.post("/create_discount" , applyDiscount)
+router.post("/create_discount", applyDiscount);
 //
 //
 //
 //
-module.exports = router
+module.exports = router;
