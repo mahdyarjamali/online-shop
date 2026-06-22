@@ -2,6 +2,7 @@ const express = require("express");
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
 const cartRoutes = require("./routes/carts");
+const orderRoutes = require("./routes/orders");
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.use("/api/products", productRoutes);
 
 // cart routes:
 app.use("/api/carts", cartRoutes);
+
+// order routes:
+app.use("/api/orders", orderRoutes);
 
 
 app.listen(3000, () => {
