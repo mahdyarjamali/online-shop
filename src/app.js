@@ -3,6 +3,7 @@ const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/products");
 const cartRoutes = require("./routes/carts");
 const orderRoutes = require("./routes/orders");
+const discountRoutes = require("./routes/discounts");
 
 const app = express();
 
@@ -21,6 +22,9 @@ app.use("/api/carts", cartRoutes);
 
 // order routes:
 app.use("/api/orders", orderRoutes);
+
+// discount routes:
+app.use("/api/discounts", discountRoutes);
 
 
 app.listen(3000, () => {
