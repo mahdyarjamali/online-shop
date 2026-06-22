@@ -27,13 +27,36 @@ const createOrder = function (req, res) {
     );
   });
 };
+
+const createOrderDetails = function (req, res) {
+  const orderInfo = [
+    req.body.order_id,
+    req.body.product_id,
+    req.body.quantity,
+    req.body.price,
+  ];
+
+  db.run(
+    `insert into order_items (order_id , product_id , quantity , price)
+        values (? , ? , ? , ?)`,
+    orderInfo,
+    (err) => {
+      if (err) {
+        res.send(err.message);
+      } else {
+        res.send("order item added successfully");
+      }
+    },
+  );
+};
 //
 //
 //
 //
-router.post("/create-order", createOrder)
+router.post("/create-order", createOrder);
+router.post("/order_add", createOrderDetails);
 //
 //
 //
 //
-module.exports = router
+module.exports = router;
