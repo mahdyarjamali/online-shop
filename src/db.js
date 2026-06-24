@@ -132,4 +132,4 @@ db.serialize(() => {
   );
 });
 
-db.close();
+module.exports = db
