@@ -9,10 +9,41 @@ const User = {
       callback,
     );
   },
+
   findAll: function (callback) {
     db.all(`select * from users`, [], callback);
   },
-  delete: function (id, callback) {
+
+  findById: function (id, callback) {
+    db.get(
+      `select * from users
+      where id = ?`,
+      [id],
+      callback,
+    );
+  },
+
+  findByEmailAndPassword: function (loginData, callback) {
+    db.get(
+      `select * from users
+        where email = ?
+        and password = ?`,
+      loginData,
+      callback,
+    );
+  },
+
+  resetPassword: function (passwordData, callback) {
+    db.run(
+      `update users
+      set password = ?
+      where email = ?`,
+      passwordData,
+      callback,
+    );
+  },
+
+  deleteUser: function (id, callback) {
     db.run(
       `delete from users
       where id = ?`,

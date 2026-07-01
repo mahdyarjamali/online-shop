@@ -1,41 +1,33 @@
-// const db = require("../db");
 const User = require("../models/User");
 
 const getAllUsers = function (req, res) {
-  db.serialize(() => {
-    db.all(`select * from users`, [], (err, rows) => {
-      if (err) {
-        res.send(err.message);
-      } else {
-        res.json(rows);
-      }
-    });
+  User.findAll((err, rows) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.json(rows);
+    }
   });
 };
 
 const getUserById = function (req, res) {
-  db.serialize(() => {
-    db.get(
-      `select * from users
-            where id = ?`,
-      [req.params.id],
-      (err, row) => {
-        if (err) {
-          res.send(err.message);
-        } else if (!row) {
-          res.send("user not found");
-        } else {
-          res.json(row);
-        }
-      },
-    );
+  User.findById(req.params.id, (err, row) => {
+    if (err) {
+      res.send(err.message);
+    } else if (!row) {
+      res.send("user not found");
+    } else {
+      res.json(row);
+    }
   });
 };
 
 const deleteUser = function (req, res) {
-  User.delete(req.params.id, (err) => {
+  User.deleteUser(req.params.id, function (err) {
     if (err) {
       res.send(err.message);
+    } else if (this.changes === 0) {
+      res.send("user not found");
     } else {
       res.send("user deleted successfully");
     }
