@@ -22,6 +22,28 @@ const getUserById = function (req, res) {
   });
 };
 
+const updateUser = function (req, res) {
+  const userData = [
+    req.body.name,
+    req.body.email,
+    req.body.password,
+    req.body.phone,
+    req.body.role,
+    req.body.address,
+    req.params.id,
+  ];
+
+  User.updateUser(userData, function (err) {
+    if (err) {
+      res.send(err.message);
+    } else if (this.changes === 0) {
+      res.send("user not found");
+    } else {
+      res.send("user updated successfully");
+    }
+  });
+};
+
 const deleteUser = function (req, res) {
   User.deleteUser(req.params.id, function (err) {
     if (err) {
@@ -37,5 +59,6 @@ const deleteUser = function (req, res) {
 module.exports = {
   getAllUsers,
   getUserById,
+  updateUser,
   deleteUser,
 };

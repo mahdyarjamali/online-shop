@@ -43,6 +43,21 @@ const User = {
     );
   },
 
+  updateUser: function (userData, callback) {
+    db.run(
+      `update users
+      set name = ?,
+      email = ?,
+      password = ?,
+      phone = ?,
+      role = ?,
+      address = ?
+      where id = ?`,
+      userData,
+      callback,
+    );
+  },
+
   deleteUser: function (id, callback) {
     db.run(
       `delete from users
