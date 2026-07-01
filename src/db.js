@@ -1,5 +1,6 @@
+const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("shop.db");
+const db = new sqlite3.Database(path.join(__dirname, "shop.db"));
 db.run("PRAGMA foreign_keys = ON");
 
 db.serialize(() => {
@@ -132,4 +133,4 @@ db.serialize(() => {
   );
 });
 
-module.exports = db
+module.exports = db;
