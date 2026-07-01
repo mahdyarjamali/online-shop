@@ -1,4 +1,5 @@
-const db = require("../db");
+// const db = require("../db");
+const User = require("../models/User");
 
 const register = function (req, res) {
   const userData = [
@@ -9,19 +10,13 @@ const register = function (req, res) {
     req.body.role,
     req.body.address,
   ];
-  db.serialize(() => {
-    db.run(
-      `insert into users (name , email , password , phone , role , address)
-      values (? , ? , ? , ? , ? , ?)`,
-      userData,
-      (err) => {
-        if (err) {
-          res.send(err.message);
-        } else {
-          res.send("user added successfully");
-        }
-      },
-    );
+
+  User.create(userData, (err) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.send("user added successfully");
+    }
   });
 };
 
