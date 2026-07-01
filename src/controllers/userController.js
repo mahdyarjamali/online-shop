@@ -1,4 +1,5 @@
-const db = require("../db");
+// const db = require("../db");
+const User = require("../models/User");
 
 const getAllUsers = function (req, res) {
   db.serialize(() => {
@@ -31,7 +32,18 @@ const getUserById = function (req, res) {
   });
 };
 
+const deleteUser = function (req, res) {
+  User.delete(req.params.id, (err) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.send("user deleted successfully");
+    }
+  });
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
+  deleteUser,
 };
