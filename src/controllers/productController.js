@@ -1,4 +1,4 @@
-const db = require("../db");
+const Product = require("../models/Product");
 
 const createProduct = function (req, res) {
   const productData = [
@@ -9,19 +9,13 @@ const createProduct = function (req, res) {
     req.body.stock,
     req.body.image,
   ];
-  db.serialize(() => {
-    db.run(
-      `insert into products (name , description , price , category , stock , image)
-            values (? , ? , ? , ? , ? , ?)`,
-      productData,
-      (err) => {
-        if (err) {
-          res.send(err.message);
-        } else {
-          res.send("product added successfully");
-        }
-      },
-    );
+
+  Product.create(productData, (err) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.send("product added successfully");
+    }
   });
 };
 
