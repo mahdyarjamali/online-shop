@@ -1,4 +1,4 @@
-const db = require("../db");
+const Order = require("../models/Order");
 
 const createOrder = function (req, res) {
   const orderData = [
@@ -8,45 +8,85 @@ const createOrder = function (req, res) {
     req.body.address,
   ];
 
-  db.serialize(() => {
-    db.run(
-      `insert into orders (user_id , total_price , status , address)
-            values (? , ? , ? , ?)`,
-      orderData,
-      (err) => {
-        if (err) {
-          res.send(err.message);
-        } else {
-          res.send("order created successfully");
-        }
-      },
-    );
+  Order.createOrder(orderData, (err) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.send("order created successfully");
+    }
   });
 };
 
-const createOrderDetails = function (req, res) {
-  const orderInfo = [
+const addOrderItem = function (req, res) {
+  const orderItemData = [
     req.body.order_id,
     req.body.product_id,
     req.body.quantity,
     req.body.price,
   ];
 
-  db.run(
-    `insert into order_items (order_id , product_id , quantity , price)
-        values (? , ? , ? , ?)`,
-    orderInfo,
-    (err) => {
-      if (err) {
-        res.send(err.message);
-      } else {
-        res.send("order item added successfully");
-      }
-    },
-  );
+  Order.addOrderItem(orderItemData, (err) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.send("order item added successfully");
+    }
+  });
+};
+
+const getAllOrders = function (req, res) {
+  Order.findAll((err, rows) => {
+    if (err) {
+      res.send(err.message);
+    } else {
+      res.json(rows);
+    }
+  });
+};
+
+const getOrderById = function (req, res) {
+  Order.findById(req.params.id, (err, row) => {
+    if (err) {
+      res.send(err.message);
+    } else if (!row) {
+      res.send("order not found");
+    } else {
+      res.json(row);
+    }
+  });
+};
+
+const updateStatus = function (req, res) {
+  const statusData = [req.body.status, req.params.id];
+
+  Order.updateStatus(statusData, function (err) {
+    if (err) {
+      res.send(err.message);
+    } else if (this.changes === 0) {
+      res.send("order not found");
+    } else {
+      res.send("order status updated successfully");
+    }
+  });
+};
+
+const deleteOrder = function (req, res) {
+  Order.deleteOrder(req.params.id, function (err) {
+    if (err) {
+      res.send(err.message);
+    } else if (this.changes === 0) {
+      res.send("order not found");
+    } else {
+      res.send("order deleted successfully");
+    }
+  });
 };
 
 module.exports = {
   createOrder,
-  createOrderDetails,
+  addOrderItem,
+  getAllOrders,
+  getOrderById,
+  updateStatus,
+  deleteOrder,
 };
