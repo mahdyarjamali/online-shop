@@ -3,7 +3,7 @@ const router = express.Router();
 
 const discountController = require("../controllers/discountController");
 
-router.post("/create-discount", discountController.createDiscount);
+router.post("/", discountController.createDiscount);
 
 router.get("/", discountController.getAllDiscounts);
 

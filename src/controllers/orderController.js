@@ -19,7 +19,7 @@ const createOrder = function (req, res) {
 
 const addOrderItem = function (req, res) {
   const orderItemData = [
-    req.body.order_id,
+    req.params.orderId,
     req.body.product_id,
     req.body.quantity,
     req.body.price,

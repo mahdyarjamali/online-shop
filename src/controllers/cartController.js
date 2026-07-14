@@ -14,7 +14,7 @@ const createCart = function (req, res) {
 
 const addToCart = function (req, res) {
   const cartItemData = [
-    req.body.cart_id,
+    req.params.cartId,
     req.body.product_id,
     req.body.quantity,
   ];
@@ -43,8 +43,8 @@ const getCart = function (req, res) {
 const updateQuantity = function (req, res) {
   const quantityData = [
     req.body.quantity,
-    req.body.cart_id,
-    req.body.product_id,
+    req.params.cartId,
+    req.params.productId,
   ];
 
   Cart.updateQuantity(quantityData, function (err) {
@@ -59,7 +59,7 @@ const updateQuantity = function (req, res) {
 };
 
 const removeItem = function (req, res) {
-  const cartItemData = [req.body.cart_id, req.body.product_id];
+  const cartItemData = [req.params.cartId, req.params.productId];
 
   Cart.removeItem(cartItemData, function (err) {
     if (err) {
