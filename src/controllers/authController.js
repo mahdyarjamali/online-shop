@@ -12,10 +12,14 @@ const register = function (req, res) {
 
   User.create(userData, (err) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.send("user added successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(201).json({
+      message: "User registered successfully",
+    });
   });
 };
 
@@ -24,28 +28,47 @@ const login = function (req, res) {
 
   User.findByEmailAndPassword(loginData, (err, row) => {
     if (err) {
-      res.send(err.message);
-    } else if (!row) {
-      res.send("Invalid email or password");
-    } else {
-      res.send("Login successful");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (!row) {
+      return res.status(401).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Login successful",
+    });
   });
 };
 
 const logout = function (req, res) {
-  res.send("Logout successful");
+  return res.status(200).json({
+    message: "Logout successful",
+  });
 };
 
 const me = function (req, res) {
   User.findById(req.params.id, (err, row) => {
     if (err) {
-      res.send(err.message);
-    } else if (!row) {
-      res.send("user not found");
-    } else {
-      res.json(row);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (!row) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "User retrieved successfully",
+      data: row,
+    });
   });
 };
 
@@ -54,12 +77,20 @@ const resetPassword = function (req, res) {
 
   User.resetPassword(passwordData, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("user not found");
-    } else {
-      res.send("Password updated successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Password updated successfully",
+    });
   });
 };
 

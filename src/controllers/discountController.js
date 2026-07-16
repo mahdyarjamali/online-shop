@@ -9,32 +9,50 @@ const createDiscount = function (req, res) {
 
   Discount.create(discountData, (err) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.send("discount created successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(201).json({
+      message: "Discount created successfully",
+    });
   });
 };
 
 const getAllDiscounts = function (req, res) {
   Discount.findAll((err, rows) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.json(rows);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(200).json({
+      message: "Discounts retrieved successfully",
+      data: rows,
+    });
   });
 };
 
 const getDiscountByCode = function (req, res) {
   Discount.findByCode(req.params.code, (err, row) => {
     if (err) {
-      res.send(err.message);
-    } else if (!row) {
-      res.send("discount not found");
-    } else {
-      res.json(row);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (!row) {
+      return res.status(404).json({
+        message: "Discount not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Discount retrieved successfully",
+      data: row,
+    });
   });
 };
 
@@ -48,24 +66,40 @@ const updateDiscount = function (req, res) {
 
   Discount.updateDiscount(discountData, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("discount not found");
-    } else {
-      res.send("discount updated successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "Discount not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Discount updated successfully",
+    });
   });
 };
 
 const deleteDiscount = function (req, res) {
   Discount.deleteDiscount(req.params.id, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("discount not found");
-    } else {
-      res.send("discount deleted successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "Discount not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Discount deleted successfully",
+    });
   });
 };
 

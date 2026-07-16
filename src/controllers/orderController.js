@@ -10,10 +10,14 @@ const createOrder = function (req, res) {
 
   Order.createOrder(orderData, (err) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.send("order created successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(201).json({
+      message: "Order created successfully",
+    });
   });
 };
 
@@ -27,32 +31,50 @@ const addOrderItem = function (req, res) {
 
   Order.addOrderItem(orderItemData, (err) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.send("order item added successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(201).json({
+      message: "Order item added successfully",
+    });
   });
 };
 
 const getAllOrders = function (req, res) {
   Order.findAll((err, rows) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.json(rows);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(200).json({
+      message: "Orders retrieved successfully",
+      data: rows,
+    });
   });
 };
 
 const getOrderById = function (req, res) {
   Order.findById(req.params.id, (err, row) => {
     if (err) {
-      res.send(err.message);
-    } else if (!row) {
-      res.send("order not found");
-    } else {
-      res.json(row);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (!row) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Order retrieved successfully",
+      data: row,
+    });
   });
 };
 
@@ -61,24 +83,40 @@ const updateStatus = function (req, res) {
 
   Order.updateStatus(statusData, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("order not found");
-    } else {
-      res.send("order status updated successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Order status updated successfully",
+    });
   });
 };
 
 const deleteOrder = function (req, res) {
   Order.deleteOrder(req.params.id, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("order not found");
-    } else {
-      res.send("order deleted successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Order deleted successfully",
+    });
   });
 };
 

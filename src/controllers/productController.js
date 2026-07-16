@@ -12,32 +12,50 @@ const createProduct = function (req, res) {
 
   Product.create(productData, (err) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.send("product added successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(201).json({
+      message: "Product created successfully",
+    });
   });
 };
 
 const getAllProducts = function (req, res) {
   Product.findAll((err, rows) => {
     if (err) {
-      res.send(err.message);
-    } else {
-      res.json(rows);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    return res.status(200).json({
+      message: "Products retrieved successfully",
+      data: rows,
+    });
   });
 };
 
 const getProductById = function (req, res) {
   Product.findById(req.params.id, (err, row) => {
     if (err) {
-      res.send(err.message);
-    } else if (!row) {
-      res.send("product not found");
-    } else {
-      res.json(row);
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (!row) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Product retrieved successfully",
+      data: row,
+    });
   });
 };
 
@@ -54,24 +72,40 @@ const updateProduct = function (req, res) {
 
   Product.updateProduct(productData, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("product not found");
-    } else {
-      res.send("product updated successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Product updated successfully",
+    });
   });
 };
 
 const deleteProduct = function (req, res) {
   Product.deleteProduct(req.params.id, function (err) {
     if (err) {
-      res.send(err.message);
-    } else if (this.changes === 0) {
-      res.send("product not found");
-    } else {
-      res.send("product deleted successfully");
+      return res.status(500).json({
+        message: err.message,
+      });
     }
+
+    if (this.changes === 0) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Product deleted successfully",
+    });
   });
 };
 
