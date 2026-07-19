@@ -39,6 +39,8 @@ const login = function (req, res) {
       });
     }
 
+    req.session.userId = row.id;
+
     return res.status(200).json({
       message: "Login successful",
     });
@@ -46,13 +48,21 @@ const login = function (req, res) {
 };
 
 const logout = function (req, res) {
-  return res.status(200).json({
-    message: "Logout successful",
+  req.session.destroy(function (err) {
+    if (err) {
+      return res.status(500).json({
+        message: err.message,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Logout successful",
+    });
   });
 };
 
 const me = function (req, res) {
-  User.findById(req.params.id, (err, row) => {
+  User.findById(req.session.userId, (err, row) => {
     if (err) {
       return res.status(500).json({
         message: err.message,
