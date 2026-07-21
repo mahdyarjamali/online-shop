@@ -1,29 +1,13 @@
-const Cart = require("../models/Cart");
+const CartItem = require("../models/CartItem");
 
-const createCart = function (req, res) {
-  const cartData = [req.body.user_id];
-
-  Cart.createCart(cartData, (err) => {
-    if (err) {
-      return res.status(500).json({
-        message: err.message,
-      });
-    }
-
-    return res.status(201).json({
-      message: "Cart created successfully",
-    });
-  });
-};
-
-const addToCart = function (req, res) {
-  const cartItemData = [
-    req.params.cartId,
+const addItem = function (req, res) {
+  const itemData = [
+    req.params.userId,
     req.body.product_id,
     req.body.quantity,
   ];
 
-  Cart.addToCart(cartItemData, (err) => {
+  CartItem.addItem(itemData, (err) => {
     if (err) {
       return res.status(500).json({
         message: err.message,
@@ -37,7 +21,7 @@ const addToCart = function (req, res) {
 };
 
 const getCart = function (req, res) {
-  Cart.findByCartId(req.params.cartId, (err, rows) => {
+  CartItem.findByUserId(req.params.userId, (err, rows) => {
     if (err) {
       return res.status(500).json({
         message: err.message,
@@ -61,11 +45,11 @@ const getCart = function (req, res) {
 const updateQuantity = function (req, res) {
   const quantityData = [
     req.body.quantity,
-    req.params.cartId,
+    req.params.userId,
     req.params.productId,
   ];
 
-  Cart.updateQuantity(quantityData, function (err) {
+  CartItem.updateQuantity(quantityData, function (err) {
     if (err) {
       return res.status(500).json({
         message: err.message,
@@ -85,9 +69,9 @@ const updateQuantity = function (req, res) {
 };
 
 const removeItem = function (req, res) {
-  const cartItemData = [req.params.cartId, req.params.productId];
+  const cartItemData = [req.params.userId, req.params.productId];
 
-  Cart.removeItem(cartItemData, function (err) {
+  CartItem.removeItem(cartItemData, function (err) {
     if (err) {
       return res.status(500).json({
         message: err.message,
@@ -107,7 +91,7 @@ const removeItem = function (req, res) {
 };
 
 const clearCart = function (req, res) {
-  Cart.clearCart(req.params.cartId, function (err) {
+  CartItem.clearCart(req.params.userId, function (err) {
     if (err) {
       return res.status(500).json({
         message: err.message,
@@ -127,8 +111,7 @@ const clearCart = function (req, res) {
 };
 
 module.exports = {
-  createCart,
-  addToCart,
+  addItem,
   getCart,
   updateQuantity,
   removeItem,

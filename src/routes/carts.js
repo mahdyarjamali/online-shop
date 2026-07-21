@@ -3,16 +3,14 @@ const router = express.Router();
 
 const cartController = require("../controllers/cartController");
 
-router.post("/", cartController.createCart);
+router.post("/:userId/items", cartController.addItem);
 
-router.post("/:cartId/items", cartController.addToCart);
+router.get("/:userId", cartController.getCart);
 
-router.get("/:cartId", cartController.getCart);
+router.put("/:userId/items/:productId", cartController.updateQuantity);
 
-router.put("/:cartId/items/:productId", cartController.updateQuantity);
+router.delete("/:userId/items/:productId", cartController.removeItem);
 
-router.delete("/:cartId/items/:productId", cartController.removeItem);
-
-router.delete("/:cartId/items", cartController.clearCart);
+router.delete("/:userId/items", cartController.clearCart);
 
 module.exports = router;

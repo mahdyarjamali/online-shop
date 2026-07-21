@@ -1,29 +1,20 @@
 const db = require("../db");
 
-const Cart = {
-  createCart: function (cartData, callback) {
+const CartItem = {
+  addItem: function (itemData, callback) {
     db.run(
-      `insert into carts (user_id)
-            values (?)`,
-      cartData,
-      callback,
-    );
-  },
-
-  addToCart: function (cartItemData, callback) {
-    db.run(
-      `insert into cart_items (cart_id , product_id , quantity)
+      `insert into cart_items (user_id , product_id , quantity)
         values (? , ? , ?)`,
-      cartItemData,
+      itemData,
       callback,
     );
   },
 
-  findByCartId: function (cartId, callback) {
+  findByUserId: function (userId, callback) {
     db.all(
       `select * from cart_items
-        where cart_id = ?`,
-      [cartId],
+        where user_id = ?`,
+      [userId],
       callback,
     );
   },
@@ -32,7 +23,7 @@ const Cart = {
     db.run(
       `update cart_items 
         set quantity = ?
-        where cart_id = ?
+        where user_id = ?
         and product_id = ?`,
       cartItemData,
       callback,
@@ -42,21 +33,21 @@ const Cart = {
   removeItem: function (cartItemData, callback) {
     db.run(
       `delete from cart_items
-        where cart_id = ?
+        where user_id = ?
         and product_id = ?`,
       cartItemData,
       callback,
     );
   },
 
-  clearCart: function (cartId, callback) {
+  clearCart: function (userId, callback) {
     db.run(
       `delete from cart_items
-        where cart_id = ?`,
-      [cartId],
+        where user_id = ?`,
+      [userId],
       callback,
     );
   },
 };
 
-module.exports = Cart;
+module.exports = CartItem;

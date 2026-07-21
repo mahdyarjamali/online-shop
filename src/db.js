@@ -81,30 +81,15 @@ db.serialize(() => {
       }
     },
   );
-  db.run(
-    `create table if not exists carts (
-    id integer primary key autoincrement,
-    user_id integer not null unique,
-    
-    foreign key (user_id) references users(id)
-    )`,
-    (err) => {
-      if (err) {
-        console.error(err.message);
-      } else {
-        console.log("Carts table created successfully");
-      }
-    },
-  );
 
   db.run(
     `create table if not exists cart_items (
     id integer primary key autoincrement,
-    cart_id integer not null,
+    user_id integer not null,
     product_id integer not null,
     quantity integer not null check(quantity > 0),
 
-    foreign key (cart_id) references carts(id),
+    foreign key (user_id) references users(id),
     foreign key (product_id) references products(id)
     )`,
     (err) => {
