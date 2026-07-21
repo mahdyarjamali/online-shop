@@ -48,6 +48,12 @@ const login = function (req, res) {
 };
 
 const logout = function (req, res) {
+  if (!req.session.userId) {
+    return res.status(200).json({
+      message: "Already logged out",
+    });
+  }
+
   req.session.destroy(function (err) {
     if (err) {
       return res.status(500).json({
