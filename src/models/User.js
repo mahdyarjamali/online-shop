@@ -23,12 +23,11 @@ const User = {
     );
   },
 
-  findByEmailAndPassword: function (loginData, callback) {
+  findByEmail: function (email, callback) {
     db.get(
       `select * from users
-        where email = ?
-        and password = ?`,
-      loginData,
+    where email = ?`,
+      [email],
       callback,
     );
   },

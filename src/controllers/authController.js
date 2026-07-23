@@ -1,50 +1,70 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
 
-const register = function (req, res) {
-  const userData = [
-    req.body.name,
-    req.body.email,
-    req.body.password,
-    req.body.phone,
-    req.body.role,
-    req.body.address,
-  ];
+const register = async function (req, res) {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-  User.create(userData, (err) => {
-    if (err) {
-      return res.status(500).json({
-        message: err.message,
+    const userData = [
+      req.body.name,
+      req.body.email,
+      hashedPassword,
+      req.body.phone,
+      req.body.role,
+      req.body.address,
+    ];
+
+    User.create(userData, (err) => {
+      if (err) {
+        return res.status(500).json({
+          message: err.message,
+        });
+      }
+
+      return res.status(201).json({
+        message: "User registered successfully",
       });
-    }
-
-    return res.status(201).json({
-      message: "User registered successfully",
     });
-  });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
-const login = function (req, res) {
-  const loginData = [req.body.email, req.body.password];
+const login = async function (req, res) {
+  try {
+    User.findByEmail(req.body.email, async (err, row) => {
+      if (err) {
+        return res.status(500).json({
+          message: err.message,
+        });
+      }
 
-  User.findByEmailAndPassword(loginData, (err, row) => {
-    if (err) {
-      return res.status(500).json({
-        message: err.message,
+      if (!row) {
+        return res.status(401).json({
+          message: "Invalid email or password",
+        });
+      }
+
+      const isMatch = await bcrypt.compare(req.body.password, row.password);
+      if (!isMatch) {
+        return res.status(401).json({
+          message: "Invalid email or password",
+        });
+      }
+
+      req.session.userId = row.id;
+
+      return res.status(200).json({
+        message: "Login successful",
       });
-    }
-
-    if (!row) {
-      return res.status(401).json({
-        message: "Invalid email or password",
-      });
-    }
-
-    req.session.userId = row.id;
-
-    return res.status(200).json({
-      message: "Login successful",
     });
-  });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
 const logout = function (req, res) {
